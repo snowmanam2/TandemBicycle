@@ -100,6 +100,15 @@ public class Story {
 				node = names.getString(index);
 			}
 			
+			if (node.startsWith("Resuscitate?")) {
+				Random r = new Random();
+				if(r.nextBoolean()){
+					node = "ResuscitateSuccess";
+				} else {
+					node = "ResuscitateFailure";
+				}
+			}
+			
 			/* If we receive an invalid node name, go to "startNode" in "Default" */
 			if (!rootNode.has(node)) {
 				JSONObject defaultNode = rootNode.getJSONObject("Default");
@@ -115,6 +124,10 @@ public class Story {
 			/* Pull choices from "Default" if we have no choices */
 			if (currentNode.has("choices")) {
 				choices = currentNode.getJSONArray("choices");
+				if(choices.length() == 0) {
+					JSONObject defaultNode = rootNode.getJSONObject("Default");
+					choices = defaultNode.getJSONArray("choices");
+				}
 			} else {
 				JSONObject defaultNode = rootNode.getJSONObject("Default");
 				choices = defaultNode.getJSONArray("choices");
